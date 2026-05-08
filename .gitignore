@@ -3,7 +3,7 @@
 .env.local
 .env.production
 .env.development
-src/main/resources/.env
+src/main/resources/.env*
 !.env.example
 
 # Root application.properties is wrong location, should not exist
@@ -27,6 +27,7 @@ frontend/test_realtime.js
 frontend/test_storage.js
 
 # === IDE ===
+.claude/
 .idea/
 .vscode/
 *.iml
