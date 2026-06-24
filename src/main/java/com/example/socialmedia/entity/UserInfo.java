@@ -1,6 +1,7 @@
 package com.example.socialmedia.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "user_info")
@@ -18,6 +19,7 @@ public class UserInfo {
     private String location;
     private String gender;
     private String dob;
+    @Pattern(regexp = "^[0-9]{10}$", message = "Phone must be exactly 10 digits")
     private String phone;
 
     @Enumerated(EnumType.STRING)

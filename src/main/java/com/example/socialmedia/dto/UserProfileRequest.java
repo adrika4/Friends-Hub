@@ -1,5 +1,7 @@
 package com.example.socialmedia.dto;
 
+import jakarta.validation.constraints.Pattern;
+
 public class UserProfileRequest {
     private String firstName;
     private String lastName;
@@ -9,8 +11,10 @@ public class UserProfileRequest {
     private String location;
     private String gender;
     private String dob;
+    @Pattern(regexp = "^[0-9]{10}$", message = "Phone must be exactly 10 digits")
     private String phone;
     private String profileVisibility;
+
 
     public String getFirstName() {
         return firstName;
