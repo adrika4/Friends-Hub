@@ -7,6 +7,7 @@ import MainLayout from './layouts/MainLayout';
 import { Suspense, lazy } from 'react';
 import { Loader } from 'lucide-react';
 import { Analytics } from '@vercel/analytics/react';
+import ScrollToTop from "./components/ScrollToTop";
 
 // Lazy load pages
 const LoginPage = lazy(() => import('./pages/LoginPage'));
@@ -62,6 +63,7 @@ export default function App() {
               </Routes>
             </Suspense>
             <Analytics />
+            <ScrollToTop />
           </BrowserRouter>
         </ToastProvider>
       </AuthProvider>
