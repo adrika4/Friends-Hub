@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Heart, MessageCircle, Trash2, MoreHorizontal, Share2, Bookmark, Send } from 'lucide-react';
+import { Heart, MessageCircle, Trash2, MoreHorizontal, Bookmark, Send } from 'lucide-react';
 import { toggleLike, deletePost } from '../api/posts';
 import { useToast } from './Toast';
 import CommentSection from './CommentSection';
@@ -68,15 +68,24 @@ export default function PostCard({ post, currentEmail, onDelete }) {
         lastTap.current = now;
     };
 
-    const handleDelete = async () => {
-        setDeleting(true);
+    const handleShare = async () => {
+        const shareUrl = `${window.location.origin}/?post=${post.id}`;
+        const shareData = {
+            title: `${post.authorName} on Friends-Hub`,
+            text: post.content || 'Check out this post on Friends-Hub',
+            url: shareUrl,
+        };
         try {
-            await deletePost(post.id);
-            toast.success('Post deleted');
-            onDelete?.(post.id);
+            if (navigator.share) {
+                await navigator.share(shareData);
+            } else {
+                await navigator.clipboard.writeText(shareUrl);
+                toast.success('Link copied to clipboard');
+            }
         } catch (err) {
-            toast.error(err.response?.data?.message || 'Failed to delete');
-            setDeleting(false);
+            if (err.name !== 'AbortError') {
+                toast.error('Failed to share post');
+            }
         }
     };
 
@@ -182,7 +191,7 @@ export default function PostCard({ post, currentEmail, onDelete }) {
                     <button onClick={() => setShowComments(!showComments)} className="p-1 cursor-pointer">
                         <MessageCircle size={24} className={`transition-colors ${showComments ? 'text-[var(--accent)]' : 'text-[var(--text-primary)] hover:text-[var(--text-muted)]'}`} />
                     </button>
-                    <button className="p-1 cursor-pointer">
+                    <button onClick={handleShare} className="p-1 cursor-pointer">
                         <Send size={22} className="text-[var(--text-primary)] hover:text-[var(--text-muted)] transition-colors -rotate-12" />
                     </button>
                     <EmojiReactionPicker targetType="POST" targetId={post.id} />
